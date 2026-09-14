@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+
+<!-- ============================================================
+     CUSTOMIZATION GUIDE
+     1. Page title above.
+     2. Left column copy: search for "CUSTOMIZE: HERO COPY".
+     3. Brand mark (top-left word "Mark"): search "CUSTOMIZE: BRAND".
+     4. Colors: edit the CSS variables in :root, search "CUSTOMIZE: COLORS".
+     5. Form submit behavior: search "CUSTOMIZE: FORM SUBMIT" near the
+        bottom of the <script> — that's where you'd wire up a real API call.
+     ============================================================ -->
+
+<style>
+  /* -----------------------------------------------------------
+     CUSTOMIZE: COLORS
+     Change these six values to re-skin the entire page.
+     ----------------------------------------------------------- */
+  :root {
+    --ink: #142219;              /* deep green-black — left panel background */
+    --ink-soft: #1c2f21;         /* slightly lighter, for subtle depth on left */
+    --paper: #fcfbf8;            /* right panel background */
+    --paper-dim: #f1ede2;        /* input backgrounds */
+    --gold: #c79a46;             /* accent on dark panel */
+    --rust: #a8460f;             /* accent / focus / links on light panel */
+    --line-on-ink: rgba(243, 241, 233, 0.16);
+    --text-on-ink: #f3f1e9;
+    --text-on-ink-muted: rgba(243, 241, 233, 0.68);
+    --text-ink-dark: #1b1b18;
+    --text-muted: #6f7168;
+    --line-on-paper: #e2ddcf;
+
+    --font-display: ui-serif, Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-ink-dark);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  /* Respect users who've asked for less motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+  }
+
+  /* -----------------------------------------------------------
+     PAGE LAYOUT — two columns, full viewport height
+     ----------------------------------------------------------- */
+  .page {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 900px) {
+    .page {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* -----------------------------------------------------------
+     LEFT COLUMN — hero / welcome
+     ----------------------------------------------------------- */
+  .hero {
+    background: var(--ink);
+    background-image:
+      radial-gradient(circle at 15% 12%, var(--ink-soft) 0%, transparent 55%),
+      radial-gradient(circle at 85% 90%, var(--ink-soft) 0%, transparent 45%);
+    color: var(--text-on-ink);
+    padding: clamp(2.5rem, 5vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .hero__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* CUSTOMIZE: BRAND — swap this word / add a logo image here */
+  .brand {
+    font-family:'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 1.50rem;
+    letter-spacing: -0.07em;
+  }
+
+  .hero__badge {
+    font-size: 0.8125rem;
+    color: var(--text-on-ink-muted);
+    border: 1px solid var(--line-on-ink);
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+  }
+
+  .hero__body {
+    max-width: 34rem;
+    margin: clamp(2rem, 6vh, 4rem) 0;
+  }
+
+  /* CUSTOMIZE: HERO COPY — headline */
+  .hero__headline {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.75rem, 4vw + 1.25rem, 4.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem 0;
+  }
+
+  /* CUSTOMIZE: HERO COPY — supporting line */
+  .hero__lede {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--text-on-ink-muted);
+    max-width: 32ch;
+    margin: 0 0 1.25rem 0;
+  }
+
+  /* CUSTOMIZE: HERO COPY — italic accent line */
+  .hero__accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--gold);
+    margin: 0;
+  }
+
+  /* CUSTOMIZE: HERO COPY — three feature lines */
+  .hero__features {
+    list-style: none;
+    margin: 2.5rem 0 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .hero__features li {
+    position: relative;
+    padding-left: 1.35rem;
+    color: var(--text-on-ink-muted);
+    font-size: 1rem;
+  }
+
+  .hero__features li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  .hero__footer {
+    font-size: 0.875rem;
+    color: var(--text-on-ink-muted);
+    border-top: 1px solid var(--line-on-ink);
+    padding-top: 1.25rem;
+  }
+
+  /* -----------------------------------------------------------
+     RIGHT COLUMN — authentication
+     ----------------------------------------------------------- */
+  .auth {
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2rem, 5vw, 4rem);
+  }
+
+  .auth__card {
+    width: 100%;
+    max-width: 26rem;
+  }
+
+  /* Tabs -------------------------------------------------- */
+  .tabs {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--line-on-paper);
+    margin-bottom: 2rem;
+  }
+
+  .tabs__btn {
+    appearance: none;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    padding: 0 0 1rem 0;
+    cursor: pointer;
+  }
+
+  .tabs__btn[aria-selected="true"] {
+    color: var(--text-ink-dark);
+  }
+
+  .tabs__indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background: var(--rust);
+    transform: translateX(0%);
+    transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .tabs[data-active="login"] .tabs__indicator {
+    transform: translateX(100%);
+  }
+
+  /* Heading ------------------------------------------------ */
+  .auth__heading {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .auth__subheading {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    margin: 0 0 1.75rem 0;
+  }
+
+  /* Form stack — the two panels crossfade inside this box -- */
+  .form-stack {
+    position: relative;
+    overflow: hidden;
+    transition: height 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .form-panel {
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .form-panel[hidden] {
+    display: none;
+  }
+
+  .form-panel.is-leaving {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+  }
+
+  .form-panel.is-entering {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .form-panel.is-entered {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .field label {
+    font-size: 0.875rem;
+    color: var(--text-ink-dark);
+  }
+
+  .field input {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    padding: 0.75rem 0.85rem;
+    background: var(--paper-dim);
+    border: 1px solid var(--line-on-paper);
+    border-radius: 6px;
+    color: var(--text-ink-dark);
+    outline-offset: 2px;
+  }
+
+  .field input:focus-visible {
+    outline: 2px solid var(--rust);
+    border-color: var(--rust);
+  }
+
+  .field__hint {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .field__hint.is-error {
+    color: var(--rust);
+  }
+
+  .submit {
+    width: 100%;
+    appearance: none;
+    border: none;
+    border-radius: 6px;
+    background: var(--ink);
+    color: var(--text-on-ink);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    margin-top: 0.4rem;
+    transition: background 0.18s ease;
+  }
+
+  .submit:hover {
+    background: var(--ink-soft);
+  }
+
+  .submit:focus-visible {
+    outline: 2px solid var(--rust);
+    outline-offset: 2px;
+  }
+
+  .switch-line {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+  }
+
+  .switch-line button {
+    appearance: none;
+    background: none;
+    border: none;
+    font: inherit;
+    color: var(--rust);
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .switch-line button:focus-visible {
+    outline: 2px solid var(--rust);
+    outline-offset: 2px;
+  }
+
+  /* Small screens ------------------------------------------ */
+  @media (max-width: 900px) {
+    .hero {
+      padding: 2.25rem 1.5rem;
+    }
+    .hero__body {
+      margin: 2rem 0;
+    }
+    .hero__footer {
+      display: none;
+    }
+    .auth {
+      padding: 2.5rem 1.5rem 3.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ================= LEFT COLUMN: HERO ================= -->
+  <section class="hero">
+    <div class="hero__top">
+      <span class="brand">CheckedOut</span>
+      <span class="hero__badge">Free plan available</span>
+    </div>
+
+    <div class="hero__body">
+      <h1 class="hero__headline">Build the thing<br>you keep putting off.</h1>
+      <p class="hero__lede">
+        A calmer place to plan your work, track what matters, and actually
+        finish — without ten browser tabs open just to get started.
+      </p>
+      <p class="hero__accent">Start free. No credit card, no catch.</p>
+
+      <ul class="hero__features">
+        <li>Set up your first project in under two minutes</li>
+        <li>See progress at a glance, not buried in menus</li>
+        <li>Works the same on your laptop, tablet, and phone</li>
+      </ul>
+    </div>
+
+    <div class="hero__footer">
+      Trusted by teams who'd rather ship than sit in meetings about shipping.
+    </div>
+  </section>
+
+  <!-- ================= RIGHT COLUMN: AUTH ================= -->
+  <section class="auth">
+    <div class="auth__card">
+
+      <div class="tabs" data-active="signup" id="tabs">
+        <button type="button" class="tabs__btn" id="tab-signup" role="tab" aria-selected="true" aria-controls="panel-signup">Create account</button>
+        <button type="button" class="tabs__btn" id="tab-login" role="tab" aria-selected="false" aria-controls="panel-login">Log in</button>
+        <span class="tabs__indicator" aria-hidden="true"></span>
+      </div>
+
+      <div id="heading-area">
+        <h2 class="auth__heading" id="auth-heading">Create your account</h2>
+        <p class="auth__subheading" id="auth-subheading">It takes less than a minute.</p>
+      </div>
+
+      <div class="form-stack" id="form-stack">
+
+        <!-- SIGN UP FORM -->
+        <form class="form-panel is-entered" id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" novalidate>
+          <div class="field">
+            <label for="su-name">Full name</label>
+            <input type="text" id="su-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="su-email">Email</label>
+            <input type="email" id="su-email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="su-password">Password</label>
+            <input type="password" id="su-password" name="password" autocomplete="new-password" minlength="8" required>
+            <span class="field__hint">At least 8 characters.</span>
+          </div>
+          <div class="field">
+            <label for="su-confirm">Confirm password</label>
+            <input type="password" id="su-confirm" name="confirm" autocomplete="new-password" minlength="8" required>
+            <span class="field__hint" id="confirm-hint" hidden>Passwords don't match yet.</span>
+          </div>
+          <button type="submit" class="submit">Create account</button>
+          <p class="switch-line">
+            Have an account? <button type="button" data-switch-to="login">Log in</button>
+          </p>
+        </form>
+
+        <!-- LOG IN FORM -->
+        <form class="form-panel" id="panel-login" role="tabpanel" aria-labelledby="tab-login" hidden novalidate>
+          <div class="field">
+            <label for="li-email">Email</label>
+            <input type="email" id="li-email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="li-password">Password</label>
+            <input type="password" id="li-password" name="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" class="submit">Log in</button>
+          <p class="switch-line">
+            Don't have an account? <button type="button" data-switch-to="signup">Sign up</button>
+          </p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var tabs = document.getElementById("tabs");
+  var tabSignup = document.getElementById("tab-signup");
+  var tabLogin = document.getElementById("tab-login");
+  var stack = document.getElementById("form-stack");
+  var panelSignup = document.getElementById("panel-signup");
+  var panelLogin = document.getElementById("panel-login");
+  var heading = document.getElementById("auth-heading");
+  var subheading = document.getElementById("auth-subheading");
+
+  var copy = {
+    signup: { heading: "Create your account", subheading: "It takes less than a minute." },
+    login: { heading: "Welcome back", subheading: "Log in to pick up where you left off." }
+  };
+
+  var current = "signup";
+  var isAnimating = false;
+
+  // Lock the stack to its current rendered height so we can animate to a new one
+  function lockHeight() {
+    stack.style.height = stack.offsetHeight + "px";
+  }
+
+  function switchTo(target) {
+    if (target === current || isAnimating) return;
+    isAnimating = true;
+
+    var leavingPanel = target === "login" ? panelSignup : panelLogin;
+    var enteringPanel = target === "login" ? panelLogin : panelSignup;
+
+    lockHeight();
+
+    // Fade the current panel out
+    leavingPanel.classList.remove("is-entered");
+    leavingPanel.classList.add("is-leaving");
+
+    // Prep the incoming panel off-screen (still hidden) so we can measure it
+    enteringPanel.hidden = false;
+    enteringPanel.classList.add("is-entering");
+
+    // Measure the height the stack needs once the new panel is the only visible one
+    var targetHeight = enteringPanel.scrollHeight;
+    requestAnimationFrame(function () {
+      stack.style.height = targetHeight + "px";
+    });
+
+    window.setTimeout(function () {
+      leavingPanel.hidden = true;
+      leavingPanel.classList.remove("is-leaving");
+
+      enteringPanel.classList.remove("is-entering");
+      enteringPanel.classList.add("is-entered");
+
+      // Release the fixed height back to auto once settled
+      stack.style.height = "auto";
+
+      current = target;
+      isAnimating = false;
+    }, 260);
+
+    // Tabs + heading update immediately, in step with the fade
+    tabs.setAttribute("data-active", target);
+    tabSignup.setAttribute("aria-selected", String(target === "signup"));
+    tabLogin.setAttribute("aria-selected", String(target === "login"));
+    heading.textContent = copy[target].heading;
+    subheading.textContent = copy[target].subheading;
+  }
+
+  tabSignup.addEventListener("click", function () { switchTo("signup"); });
+  tabLogin.addEventListener("click", function () { switchTo("login"); });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-switch-to]"), function (btn) {
+    btn.addEventListener("click", function () {
+      switchTo(btn.getAttribute("data-switch-to"));
+    });
+  });
+
+  // Light inline validation: flag mismatched confirm-password as the user types
+  var suPassword = document.getElementById("su-password");
+  var suConfirm = document.getElementById("su-confirm");
+  var confirmHint = document.getElementById("confirm-hint");
+
+  function checkMatch() {
+    var mismatch = suConfirm.value.length > 0 && suConfirm.value !== suPassword.value;
+    confirmHint.hidden = !mismatch;
+  }
+  suPassword.addEventListener("input", checkMatch);
+  suConfirm.addEventListener("input", checkMatch);
+
+  /* -----------------------------------------------------------
+     CUSTOMIZE: FORM SUBMIT
+     Both forms currently just prevent the default page reload.
+     Replace the two handlers below with real requests, e.g.:
+
+       fetch("/api/signup", { method: "POST", body: new FormData(panelSignup) })
+         .then(...)
+
+     ----------------------------------------------------------- */
+  panelSignup.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (suConfirm.value !== suPassword.value) {
+      checkMatch();
+      suConfirm.focus();
+      return;
+    }
+    console.log("Sign up submitted:", Object.fromEntries(new FormData(panelSignup)));
+    // TODO: send this to your backend.
+  });
+
+  panelLogin.addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log("Log in submitted:", Object.fromEntries(new FormData(panelLogin)));
+    // TODO: send this to your backend.
+  });
+})();
+</script>
+
+</body>
+</html>
